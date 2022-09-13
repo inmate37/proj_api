@@ -7,7 +7,7 @@ from django.db.models import (
 
 
 class TempModel(Model):
-    """TempModel entity."""
+    """TempModel."""
 
     name = CharField(
         verbose_name='имя',
