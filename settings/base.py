@@ -35,6 +35,7 @@ DJANGO_AND_THIRD_PARTY_APPS = [
     'rest_framework',
 ]
 PROJECT_APPS = [
+    'abstracts.apps.AbstractsConfig',
     'temp.apps.TempConfig',
     'main.apps.MainConfig',
     'auths.apps.AuthsConfig',

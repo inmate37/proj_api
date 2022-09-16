@@ -1,12 +1,43 @@
+from typing import Optional
+
 from django.db.models import (
-    Model,
     CharField,
     IntegerField,
     BooleanField,
+    QuerySet,
+    F,
 )
+from abstracts.models import AbstractsDateTime
 
 
-class TempModel(Model):
+class TempModelQuerySet(QuerySet):
+    """TempModelQuerySet."""
+
+    def get_deleted(self) -> QuerySet['TempModel']:
+        return self.filter(
+            datetime_deleted__isnull=False
+        )
+
+    def get_not_deleted(self) -> QuerySet['TempModel']:
+        return self.filter(
+            datetime_deleted__isnull=True
+        )
+
+    def get_not_equal_updated(self) -> QuerySet['TempModel']:
+        return self.exclude(
+            datetime_updated=F('datetime_created')
+        )
+
+    def get_obj(self, p_key: str) -> Optional['TempModel']:
+        try:
+            return self.get(
+                id=p_key
+            )
+        except TempModel.DoesNotExist:
+            return None
+
+
+class TempModel(AbstractsDateTime):
     """TempModel."""
 
     name = CharField(
@@ -19,6 +50,8 @@ class TempModel(Model):
     is_activated = BooleanField(
         default=False
     )
+
+    objects = TempModelQuerySet().as_manager()
 
     class Meta:
         ordering = (
