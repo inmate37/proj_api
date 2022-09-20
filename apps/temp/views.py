@@ -15,10 +15,18 @@ from temp.serializers import (
     TempSerializer,
     TempTwoSerializer,
 )
-from abstracts.mixins import ResponseMixin
+from abstracts.mixins import (
+    ResponseMixin,
+    ValidationMixin,
+)
+
+
+class A:
+    pass
 
 
 class TempViewSet(
+    ValidationMixin,
     ResponseMixin,
     ViewSet
 ):
@@ -59,20 +67,22 @@ class TempViewSet(
 
     def retrieve(self, request: Request, pk: str) -> Response:
 
-        obj: Optional[TempModel] = self.queryset.get_obj(
+        obj: TempModel = self.get_obj_if_exists_raise_if_doesnt(
+            self.queryset,
             pk
         )
-        if not obj:
-            return self.get_json_response(
-                {
-                    'message': 'Объект не найден',
-                    'payload': {
-                        'invalid_obj_id': f'{pk}'
-                    }
-
-                }
-            )
-
+        # obj: Optional[TempModel] = self.queryset.get_obj(
+        #     pk
+        # )
+        # if not obj:
+        #     return self.get_json_response(
+        #         {
+        #             'message': 'Объект не найден',
+        #             'payload': {
+        #                 'invalid_obj_id': f'{pk}'
+        #             }
+        #         }
+        #     )
         serializer: TempSerializer = \
             TempSerializer(
                 obj
@@ -83,22 +93,23 @@ class TempViewSet(
 
     def destroy(self, request: Request, pk: str) -> Response:
 
-        obj: Optional[TempModel] = self.queryset.get_obj(
+        obj: TempModel = self.get_obj_if_exists_raise_if_doesnt(
+            self.queryset,
             pk
         )
-        if not obj:
-            return self.get_json_response(
-                {
-                    'message': 'Объект не найден',
-                    'payload': {
-                        'invalid_obj_id': f'{pk}'
-                    }
-
-                }
-            )
-
-        obj.datetime_deleted = datetime.now()
-        obj.save()
+        # obj: Optional[TempModel] = self.queryset.get_obj(
+        #     pk
+        # )
+        # if not obj:
+        #     return self.get_json_response(
+        #         {
+        #             'message': 'Объект не найден',
+        #             'payload': {
+        #                 'invalid_obj_id': f'{pk}'
+        #             }
+        #         }
+        #     )
+        obj.delete()
 
         return self.get_json_response(
             {

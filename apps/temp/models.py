@@ -1,5 +1,7 @@
-from typing import Optional
-
+from typing import (
+    Any,
+    Optional,
+)
 from django.db.models import (
     CharField,
     IntegerField,
@@ -59,6 +61,17 @@ class TempModel(AbstractsDateTime):
         )
         verbose_name = 'временная модель'
         verbose_name_plural = 'временные модели'
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        print(self)
+        super().save(*args, **kwargs)
+
+    def delete(self) -> None:
+        self.datetime_deleted = datetime.now()
+        self.save(
+            update_field=['datetime_deleted']
+        )
+        # super().delete()
 
     def __str__(self) -> str:
         return f'Временная модель: {self.name}'
