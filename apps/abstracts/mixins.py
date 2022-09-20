@@ -26,11 +26,11 @@ class ResponseMixin:
 class ValidationMixin:
     """ValidationMixin."""
 
-    def get_obj_if_exists_raise_if_doesnt(
+    def get_obj_or_raise(
         self,
         queryset: QuerySet[Any],
         p_key: str
-    ) -> None:
+    ) -> Any:
 
         obj: Any = queryset.get_obj(
             p_key

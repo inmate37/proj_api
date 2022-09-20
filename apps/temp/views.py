@@ -67,7 +67,7 @@ class TempViewSet(
 
     def retrieve(self, request: Request, pk: str) -> Response:
 
-        obj: TempModel = self.get_obj_if_exists_raise_if_doesnt(
+        obj: TempModel = self.get_obj_or_raise(
             self.queryset,
             pk
         )
@@ -93,7 +93,7 @@ class TempViewSet(
 
     def destroy(self, request: Request, pk: str) -> Response:
 
-        obj: TempModel = self.get_obj_if_exists_raise_if_doesnt(
+        obj: TempModel = self.get_obj_or_raise(
             self.queryset,
             pk
         )

@@ -69,7 +69,7 @@ class TempModel(AbstractsDateTime):
     def delete(self) -> None:
         self.datetime_deleted = datetime.now()
         self.save(
-            update_field=['datetime_deleted']
+            update_fields=['datetime_deleted']
         )
         # super().delete()
 
