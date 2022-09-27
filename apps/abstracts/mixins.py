@@ -1,10 +1,13 @@
-from typing import (
-    Any,
-)
+# Python
+from typing import Any
+
+# DRF
 from rest_framework.response import Response
 
+# Django
 from django.db.models import QuerySet
 
+# First party
 from abstracts.validators import APIValidator
 
 

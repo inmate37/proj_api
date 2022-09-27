@@ -14,28 +14,29 @@ from django.core.exceptions import ValidationError
 class APIValidator(APIException):
     """General-purpose validator for API."""
 
-    status_code: Optional[str] = None
+    status_code: Optional[int] = None
+    status_map: dict[str, int] = {
+        '500': HTTP_500_INTERNAL_SERVER_ERROR,
+        '404': HTTP_404_NOT_FOUND,
+        '403': HTTP_403_FORBIDDEN,
+        '400': HTTP_400_BAD_REQUEST,
+    }
 
     def __init__(
-        self, detail: dict, field: str, code: str
+        self, message: str, field: str, code: str = '400'
     ) -> None:
 
-        if code == '500':
-            self.status_code = HTTP_500_INTERNAL_SERVER_ERROR
-        elif code == '404':
-            self.status_code = HTTP_404_NOT_FOUND
-        elif code == '403':
-            self.status_code = HTTP_403_FORBIDDEN
-        elif code == '400':
-            self.status_code = HTTP_400_BAD_REQUEST
-        else:
+        self.status_code = self.status_map.get(
+            code, None
+        )
+        if not self.status_code:
             raise ValidationError(
                 'Статус код неизвестен'
             )
 
-        if detail:
+        if message:
             self.detail = {
-                field: detail
+                field: message
             }
         else:
             self.detail = {
