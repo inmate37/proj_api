@@ -1,8 +1,9 @@
+# Python
 import os
 import sys
 
+# Third party
 from settings.conf import *  # noqa
-
 
 BASE_DIR = os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))
@@ -33,6 +34,7 @@ DJANGO_AND_THIRD_PARTY_APPS = [
     'django_extensions',
 
     'rest_framework',
+    'rest_framework_simplejwt',
 ]
 PROJECT_APPS = [
     'abstracts.apps.AbstractsConfig',

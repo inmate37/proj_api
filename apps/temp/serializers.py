@@ -1,18 +1,20 @@
+# DRF
 from rest_framework.serializers import (
-    ModelSerializer,
+    BooleanField,
     CharField,
     IntegerField,
-    BooleanField,
-    DateTimeField,
-    SerializerMethodField,
+    ModelSerializer,
+    SerializerMethodField
 )
+
+# First party
 from temp.models import TempModel
 
 
 class TempSerializer(ModelSerializer):
     """TempSerializer."""
 
-    name = CharField(required=False)
+    name = CharField(required=True)
     number = IntegerField(required=False)
     is_activated = BooleanField(required=False)
 

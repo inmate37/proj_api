@@ -14,11 +14,6 @@ from datetime import (
     timedelta
 )
 
-# Third party
-from bibtexparser.bparser import BibTexParser
-from parsifal.reviews.models import Review
-from pydantic import BaseModel
-
 # DRF
 from rest_framework import status
 from rest_framework.decorators import action
@@ -90,6 +85,89 @@ class TempViewSet(
             serializer.data
         )
 
+    def create(self, request: Request) -> Response:
+
+        serializer: TempSerializer = \
+            TempSerializer(
+                data=request.data
+            )
+        if not serializer.is_valid():
+            return self.get_json_response(
+                {
+                    'message': 'Объект не был создан',
+                    'payload': request.data
+                }
+            )
+
+        serializer.save()
+
+        return self.get_json_response(
+            {
+                'message': 'Объект был создан',
+            }
+        )
+
+    def update(self, request: Request, pk: str) -> Response:
+
+        obj: TempModel = self.get_obj_or_raise(
+            self.queryset,
+            pk
+        )
+        serializer: TempSerializer = \
+            TempSerializer(
+                obj,
+                data=request.data
+            )
+        request.data['obj_id'] = obj.id
+
+        if not serializer.is_valid():
+            return self.get_json_response(
+                {
+                    'message': 'Объект не был обновлен',
+                    'payload': request.data
+                }
+            )
+
+        serializer.save()
+
+        return self.get_json_response(
+            {
+                'message': 'Объект был обновлен',
+                'payload': request.data
+            }
+        )
+
+    def partial_update(self, request: Request, pk: str) -> Response:
+
+        obj: TempModel = self.get_obj_or_raise(
+            self.queryset,
+            pk
+        )
+        serializer: TempSerializer = \
+            TempSerializer(
+                obj,
+                data=request.data,
+                partial=True
+            )
+        request.data['obj_id'] = obj.id
+
+        if not serializer.is_valid():
+            return self.get_json_response(
+                {
+                    'message': 'Объект не был частично-обновлен',
+                    'payload': request.data
+                }
+            )
+
+        serializer.save()
+
+        return self.get_json_response(
+            {
+                'message': 'Объект был частично-обновлен',
+                'payload': request.data
+            }
+        )
+
     def retrieve(self, request: Request, pk: str) -> Response:
 
         obj: TempModel = self.get_obj_or_raise(
@@ -102,7 +180,7 @@ class TempViewSet(
         # if not obj:
         #     return self.get_json_response(
         #         {
-        #             'message': 'Объект не найден',
+        #             'message': 'Object not found',
         #             'payload': {
         #                 'invalid_obj_id': f'{pk}'
         #             }
@@ -118,17 +196,17 @@ class TempViewSet(
 
     def destroy(self, request: Request, pk: str) -> Response:
 
-        obj: TempModel = self.get_obj_or_raise(
-            self.queryset,
-            pk
-        )
+        # obj: TempModel = self.get_obj_or_raise(
+        #     self.queryset,
+        #     pk
+        # )
         # obj: Optional[TempModel] = self.queryset.get_obj(
         #     pk
         # )
         # if not obj:
         #     return self.get_json_response(
         #         {
-        #             'message': 'Объект не найден',
+        #             'message': 'Object not found',
         #             'payload': {
         #                 'invalid_obj_id': f'{pk}'
         #             }

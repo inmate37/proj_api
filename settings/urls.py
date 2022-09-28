@@ -1,15 +1,24 @@
+# Third party
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
+
+# DRF
 from rest_framework.routers import DefaultRouter
 
-from django.contrib import admin
-from django.urls import (
-    path,
-    include,
-)
+# Django
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import (
+    include,
+    path
+)
 
+# First party
 from temp.views import TempViewSet
-
 
 urlpatterns = [
     path(settings.ADMIN_SITE_URL, admin.site.urls),
@@ -26,12 +35,26 @@ urlpatterns = [
 router: DefaultRouter = DefaultRouter(
     trailing_slash=False
 )
-router.register(
-    'temp', TempViewSet
-)
+router.register('temp', TempViewSet)
+
 urlpatterns += [
     path(
         'api/v1/',
         include(router.urls)
+    ),
+    path(
+        'api/token/',
+        TokenObtainPairView.as_view(),
+        name='token_obtain_pair'
+    ),
+    path(
+        'api/token/refresh/',
+        TokenRefreshView.as_view(),
+        name='token_refresh'
+    ),
+    path(
+        'api/token/verify/',
+        TokenVerifyView.as_view(),
+        name='token_verify'
     ),
 ]

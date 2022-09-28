@@ -1,15 +1,24 @@
+# Python
 from typing import (
     Any,
-    Optional,
+    Optional
 )
+from datetime import datetime
+
+# Django
 from django.db.models import (
-    CharField,
-    IntegerField,
     BooleanField,
-    QuerySet,
+    CharField,
     F,
+    IntegerField,
+    QuerySet
 )
+
+# First party
 from abstracts.models import AbstractsDateTime
+
+# Local
+from .validators import TempModelValidator
 
 
 class TempModelQuerySet(QuerySet):
@@ -39,7 +48,10 @@ class TempModelQuerySet(QuerySet):
             return None
 
 
-class TempModel(AbstractsDateTime):
+class TempModel(
+    TempModelValidator,
+    AbstractsDateTime
+):
     """TempModel."""
 
     name = CharField(
@@ -62,8 +74,13 @@ class TempModel(AbstractsDateTime):
         verbose_name = 'временная модель'
         verbose_name_plural = 'временные модели'
 
+    def clean(self) -> None:
+        self.validate_number(
+            self.number
+        )
+
     def save(self, *args: Any, **kwargs: Any) -> None:
-        print(self)
+        self.full_clean()
         super().save(*args, **kwargs)
 
     def delete(self) -> None:
