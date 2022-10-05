@@ -1,15 +1,7 @@
-from django.contrib.auth.models import (
-    AbstractBaseUser,
-    PermissionsMixin,
-)
-from django.db.models import (
-    EmailField,
-    BooleanField,
-    DateTimeField,
-)
-from django.db.models import QuerySet
-from django.utils import timezone
 from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.db.models import BooleanField, DateTimeField, EmailField, QuerySet
+from django.utils import timezone
 
 
 class CustomUserManager(BaseUserManager):

@@ -1,10 +1,9 @@
 from typing import Optional
 
+from auths.models import CustomUser
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.core.handlers.wsgi import WSGIRequest
-
-from auths.models import CustomUser
 
 
 class CustomUserAdmin(UserAdmin):

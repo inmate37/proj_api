@@ -1,7 +1,4 @@
-from django.db.models import (
-    Model,
-    DateTimeField,
-)
+from django.db.models import DateTimeField, Model
 
 
 class AbstractsDateTime(Model):

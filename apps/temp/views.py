@@ -7,7 +7,7 @@ import sys
 import json
 from typing import (
     Any,
-    Set
+    Type
 )
 from datetime import (
     datetime,
@@ -36,6 +36,10 @@ from abstracts.mixins import (
     ResponseMixin,
     ValidationMixin
 )
+from abstracts.paginators import (
+    AbstractLimitOffsetPaginator,
+    AbstractPageNumberPaginator
+)
 
 # Local
 from .models import TempModel
@@ -54,6 +58,9 @@ class TempViewSet(
 
     queryset: QuerySet[TempModel] = \
         TempModel.objects.all()
+
+    pagination_class: Type[AbstractPageNumberPaginator] = \
+        AbstractPageNumberPaginator
 
     @action(
         methods=['get'],
@@ -76,13 +83,21 @@ class TempViewSet(
 
     def list(self, request: Request) -> Response:
 
+        paginator: AbstractPageNumberPaginator = \
+            self.pagination_class()
+
+        objects: list[Any] = paginator.paginate_queryset(
+            self.queryset,
+            request
+        )
         serializer: TempSerializer = \
             TempSerializer(
-                self.queryset.get_not_deleted(),
+                objects,
                 many=True
             )
         return self.get_json_response(
-            serializer.data
+            serializer.data,
+            paginator
         )
 
     def create(self, request: Request) -> Response:
@@ -196,10 +211,10 @@ class TempViewSet(
 
     def destroy(self, request: Request, pk: str) -> Response:
 
-        # obj: TempModel = self.get_obj_or_raise(
-        #     self.queryset,
-        #     pk
-        # )
+        obj: TempModel = self.get_obj_or_raise(
+            self.queryset,
+            pk
+        )
         # obj: Optional[TempModel] = self.queryset.get_obj(
         #     pk
         # )

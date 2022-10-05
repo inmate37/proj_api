@@ -1,5 +1,7 @@
+# Django
 from django.contrib import admin
 
+# First party
 from temp.models import TempModel
 
 
