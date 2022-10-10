@@ -72,6 +72,9 @@ class TempViewSet(
     )
     def list_2(self, request: Request) -> Response:
 
+        paginator: AbstractPageNumberPaginator = \
+            AbstractPageNumberPaginator()
+
         serializer: TempTwoSerializer = \
             TempTwoSerializer(
                 self.queryset,
@@ -80,6 +83,12 @@ class TempViewSet(
         return self.get_json_response(
             serializer.data
         )
+
+    def list_3(self, request: Request) -> Response:
+        pass
+
+    def list_4(self, request: Request) -> Response:
+        pass
 
     def list(self, request: Request) -> Response:
 
@@ -113,7 +122,6 @@ class TempViewSet(
                     'payload': request.data
                 }
             )
-
         serializer.save()
 
         return self.get_json_response(

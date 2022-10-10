@@ -88,7 +88,7 @@ class TempModel(
         self.save(
             update_fields=['datetime_deleted']
         )
-        # super().delete()
+        super().delete()
 
     def __str__(self) -> str:
         return f'Временная модель: {self.name}'

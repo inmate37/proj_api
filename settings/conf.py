@@ -1,6 +1,14 @@
 SECRET_KEY = 'django-insecure-oz&!3thv+3-j%*scw^%33=!&fovpaakcl_s_!!-uzq1depa#xq'
 ADMIN_SITE_URL = 'root'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'x.public.profile@gmail.com'
+EMAIL_HOST_PASSWORD = 'bdwludpqybezusha'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
 SHELL_PLUS_PRE_IMPORTS = [
     (
         'django.db',
